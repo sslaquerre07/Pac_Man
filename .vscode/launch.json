@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/GitHub/Space_Swag_Game/coding",
-      "program": "c:/GitHub/Space_Swag_Game/coding/build/Debug/outDebug",
+      "cwd": "c:/GitHub/Pac_Man/coding",
+      "program": "c:/GitHub/Pac_Man/coding/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
