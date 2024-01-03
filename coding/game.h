@@ -28,6 +28,11 @@ class Game
         void renderMap(sf::RenderTarget& target);
         void render();
 
+        void TopLeft();
+        void TopRight();
+        void BottomLeft();
+        void BottomRight();
+
     private:
         //Variables 
         //Window

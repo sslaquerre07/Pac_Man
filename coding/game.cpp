@@ -24,16 +24,19 @@ void Game::initVariables()
     this->endGame = false;
     this->points = 0;
     this->lives = 3;
-    this->map.resize(14);
-    for(int i = 0;i<this->map.at(i).size();i++){
-        this->map.resize(14);
-    }
-
+    this->map.resize(56);
 }
 
 void Game::initMap()
 {
-    //Initialize the Pac Man Map!!
+    this->TopLeft();
+    this->TopRight();
+    this->BottomLeft();
+    this->BottomRight();
+}
+
+void Game::TopLeft()
+{
     int row, col;
     for(row = 0; row < 14; row++){
         for(col = 0; col < 14; col++){
@@ -94,7 +97,7 @@ void Game::initMap()
                 }
             }
             else if(row == 10){
-                if(col <= 5 || col == 7 || col == 8){
+                if(col <= 5|| col == 7 || col == 8){
                     this->map.at(row).push_back(tiles(*this->window, 2));
                 }
                 else{
@@ -111,6 +114,273 @@ void Game::initMap()
             }
             else{
                 if(col >= 10){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+        }
+    }
+}
+
+void Game::TopRight()
+{
+    int row, col;
+    for(row = 0; row < 14; row++){
+        for(col = 13; col >= 0; col--){
+            if(row == 0){
+                this->map.at(row).push_back(tiles(*this->window, 2));
+            }
+            else if(row == 1){
+                if(col == 0 || col == 13){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+            else if(row == 2 || row == 3 || row == 4){
+                if(col == 1 || col == 6 || col == 12){
+                    if(row == 3 && col == 1){
+                        this->map.at(row).push_back(tiles(*this->window, 1));
+                    }
+                    else{
+                        this->map.at(row).push_back(tiles(*this->window, 0));
+                    }
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else if(row == 5){
+                if(col == 0){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+            else if(row == 6){
+                if(col == 1 || col == 6 || col == 9){
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else if(row == 7){
+                if(col == 0 || col == 7 || col == 8 || col == 13){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+            else if(row == 8 || row == 9){
+                if(col == 6 || col == 12){
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else if(row == 10){
+                if(col <= 5|| col == 7 || col == 8){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+            else if(row == 11 || row == 12){
+                if(col == 6 || col == 9){
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else{
+                if(col >= 10){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+        }
+    }
+}
+
+void Game::BottomLeft()
+{
+    int row, col;
+    for(row = 14; row < 28; row++){
+        for(col = 0; col < 14; col++){
+            if(row == 13+14){
+                this->map.at(row).push_back(tiles(*this->window, 2));
+            }
+            else if(row == 0+14 || row == 1+14 || row == 3+14 || row == 4+14){
+                if(col == 6 || col == 9){
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else if(row == 2+14){
+                if(col == 6 || col >= 9){
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else if(row == 5+14){
+                if(col == 0 || col == 13){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+            else if(row == 6+14 || row == 7+14){
+                if(col == 1 || col == 6 || col == 12){
+                    if(row == 7+14 && col == 1){
+                        this->map.at(row).push_back(tiles(*this->window, 1));
+                    }
+                    else{
+                        this->map.at(row).push_back(tiles(*this->window, 0));
+                    }
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else if(row == 8+14){
+                if(col == 0 || col == 4 || col == 5){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+            else if(row == 9+14){
+                if(col == 3 || col == 6 || col == 9){
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else if(row == 10+14){
+                if(col == 0 || col == 7 || col == 8 || col == 13){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+            else if(row == 11+14){
+                if(col == 1 || col == 12){
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else{
+                if(col==0){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+        }
+    }
+}
+
+void Game::BottomRight()
+{
+    int row, col;
+    for(row = 14; row < 28; row++){
+        for(col = 13; col >= 0; col--){
+            if(row == 13+14){
+                this->map.at(row).push_back(tiles(*this->window, 2));
+            }
+            else if(row == 0+14 || row == 1+14 || row == 3+14 || row == 4+14){
+                if(col == 6 || col == 9){
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else if(row == 2+14){
+                if(col == 6 || col >= 9){
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else if(row == 5+14){
+                if(col == 0 || col == 13){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+            else if(row == 6+14 || row == 7+14){
+                if(col == 1 || col == 6 || col == 12){
+                    if(row == 7+14 && col == 1){
+                        this->map.at(row).push_back(tiles(*this->window, 1));
+                    }
+                    else{
+                        this->map.at(row).push_back(tiles(*this->window, 0));
+                    }
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else if(row == 8+14){
+                if(col == 0 || col == 4 || col == 5){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+            else if(row == 9+14){
+                if(col == 3 || col == 6 || col == 9){
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else if(row == 10+14){
+                if(col == 0 || col == 7 || col == 8 || col == 13){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+            else if(row == 11+14){
+                if(col == 1 || col == 12){
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else{
+                if(col==0){
                     this->map.at(row).push_back(tiles(*this->window, 2));
                 }
                 else{
