@@ -57,10 +57,14 @@ void tiles::render(sf::RenderTarget& target, int& row, int& col)
     {
         case POINTS:
             this->circle.setPosition(col*24.f+12.f, row*24.f+12.f);
-            target.draw(this->circle);
+            if(!this->visited){
+                target.draw(this->circle);
+            }
         case SUPER:
             this->circle.setPosition(col*24.f+12.f, row*24.f+12.f);
-            target.draw(this->circle);
+            if(!this->visited){
+                target.draw(this->circle);
+            }
         case WALL:
             this->rect.setPosition(col*24.f, row*24.f);
             target.draw(this->rect);
