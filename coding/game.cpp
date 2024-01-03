@@ -487,20 +487,20 @@ void Game::updateWallCollison(size_t row, size_t col)
     float row_pos = row*24;
     float col_pos = col*24;
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-        col_pos += 24.f;
-        this->PacMan.getShape().setPosition(col_pos, row_pos);
+        col_pos += 25.f;
+        this->PacMan.getShape().setPosition(col_pos+1, this->PacMan.getShape().getPosition().y);
     }
     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-        col_pos -= 24.f;
-        this->PacMan.getShape().setPosition(col_pos, row_pos);
+        col_pos -= 19.f;
+        this->PacMan.getShape().setPosition(col_pos+1, this->PacMan.getShape().getPosition().y);
     }
     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-        row_pos += 24.f;
-        this->PacMan.getShape().setPosition(col_pos, row_pos);
+        row_pos += 25.f;
+        this->PacMan.getShape().setPosition(this->PacMan.getShape().getPosition().x, row_pos+1);
     }
     else{
-        row_pos -= 24.f;
-        this->PacMan.getShape().setPosition(col_pos, row_pos);
+        row_pos -= 19.f;
+        this->PacMan.getShape().setPosition(this->PacMan.getShape().getPosition().x, row_pos+1);
     }
 }
 
