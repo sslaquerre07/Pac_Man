@@ -8,6 +8,7 @@
 #include <sstream>
 
 #include "tiles.h"
+#include "player.h"
 
 
 class Game
@@ -40,6 +41,7 @@ class Game
         sf::Event ev;
         sf::VideoMode videoMode;
 
+        Player PacMan;
 
         //Resources 
         sf::Font font;

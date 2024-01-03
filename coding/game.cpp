@@ -463,6 +463,7 @@ void Game::update()
 {
     this->pollEvents();
     //this->updateText();
+    this->PacMan.update(this->window);
 }
 
 //Rendering
@@ -494,6 +495,7 @@ void Game::render()
     //Render the text for the game
     //this->renderText(*this->window);
     this->renderMap(*this->window);
+    this->PacMan.render(this->window);
 
     this->window->display();
 }
