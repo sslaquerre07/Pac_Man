@@ -393,7 +393,7 @@ void Game::BottomRight()
 
 void Game::initWindow()
 {
-    this->videoMode.height = 672;
+    this->videoMode.height = 710;
     this->videoMode.width = 672;
     this->window = new sf::RenderWindow(this->videoMode, "Pac Man", sf::Style::Titlebar | sf::Style::Close);
 
@@ -459,11 +459,52 @@ void Game::updateText()
     this->uiText.setString(ss.str());
 }
 
+void Game::updateDefaultCollision()
+{
+    for(size_t i = 0; i<this->map.size();i++){
+        for(size_t j = 0; j<this->map.at(i).size();j++){
+            if(this->map.at(i).at(j).getType() == 0 || this->map.at(i).at(j).getType() == 1){
+                if(this->PacMan.getShape().getGlobalBounds().intersects(this->map.at(i).at(j).getCircleShape().getGlobalBounds())){
+                    this->map.at(i).at(j).setVisited();
+                }
+            }
+            else{
+                if(this->PacMan.getShape().getGlobalBounds().intersects(this->map.at(i).at(j).getRectShape().getGlobalBounds())){
+                    updateWallCollison(i, j);
+                }
+            }
+        }
+    }
+}
+
+void Game::updateWallCollison(size_t row, size_t col)
+{
+    float row_pos = row*24;
+    float col_pos = col*24;
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+        col_pos += 24.f;
+        this->PacMan.getShape().setPosition(col_pos, row_pos);
+    }
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+        col_pos -= 24.f;
+        this->PacMan.getShape().setPosition(col_pos, row_pos);
+    }
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+        row_pos += 24.f;
+        this->PacMan.getShape().setPosition(col_pos, row_pos);
+    }
+    else{
+        row_pos -= 24.f;
+        this->PacMan.getShape().setPosition(col_pos, row_pos);
+    }
+}
+
 void Game::update()
 {
     this->pollEvents();
     //this->updateText();
     this->PacMan.update(this->window);
+    this->updateDefaultCollision();
 }
 
 //Rendering

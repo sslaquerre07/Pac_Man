@@ -45,6 +45,22 @@ const int& tiles::getType() const
     return this->type;
 }
 
+const sf::CircleShape tiles::getCircleShape()
+{
+    return this->circle;
+}
+
+const sf::RectangleShape tiles::getRectShape()
+{
+    return this->rect;
+}
+
+//Setters
+void tiles::setVisited()
+{
+    this->visited = true;
+}
+
 //Functions
 void tiles::update()
 {

@@ -9,7 +9,7 @@ void Player::initVariables()
 void Player::initShape()
 {
     this->shape.setFillColor(sf::Color::Yellow);
-    this->shape.setRadius(10.f);
+    this->shape.setRadius(9.f);
 }
 
 //Constructors and Destructor
@@ -27,7 +27,7 @@ Player::~Player()
 }
 
 //Getters
-const sf::CircleShape& Player::getShape() const
+sf::CircleShape& Player::getShape()
 {
     return this->shape;
 }
@@ -48,7 +48,7 @@ void Player::updateInput()
     }
     
     //Up and down
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
     {
         this->shape.move(0.f, -this->movementSpeed);
     }

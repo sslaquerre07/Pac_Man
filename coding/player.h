@@ -14,11 +14,11 @@ class Player
         void initShape();
 
     public:
-        Player(float x = 0.f, float y = 0.f);
+        Player(float x = 24.f, float y = 24.f);
         ~Player();
 
         //Accessors
-        const sf::CircleShape& getShape() const;
+        sf::CircleShape& getShape();
 
         //Functions
         void updateInput();

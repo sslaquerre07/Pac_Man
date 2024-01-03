@@ -14,6 +14,10 @@ class tiles{
 
         //Getter and Setters
         const int& getType() const;
+        const sf::CircleShape getCircleShape();
+        const sf::RectangleShape getRectShape();
+
+        void setVisited();
 
         //Functions
         void update();

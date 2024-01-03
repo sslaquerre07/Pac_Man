@@ -23,6 +23,8 @@ class Game
         //Functions
         void pollEvents();
         void updateText();
+        void updateDefaultCollision();
+        void updateWallCollison(size_t row, size_t col);
         void update();
 
         void renderText(sf::RenderTarget& target);
