@@ -7,6 +7,8 @@
 #include <vector>
 #include <sstream>
 
+#include "tiles.h"
+
 
 class Game
 {
@@ -23,6 +25,7 @@ class Game
         void update();
 
         void renderText(sf::RenderTarget& target);
+        void renderMap(sf::RenderTarget& target);
         void render();
 
     private:
@@ -31,6 +34,7 @@ class Game
         sf::RenderWindow* window;
         sf::Event ev;
         sf::VideoMode videoMode;
+
 
         //Resources 
         sf::Font font;
@@ -44,9 +48,11 @@ class Game
         unsigned lives;
 
         //Game objects
+        std::vector<std::vector<tiles>> map;
 
         //Private Functions
         void initVariables();
+        void initMap();
         void initWindow();
         void initFonts();
         void initText();

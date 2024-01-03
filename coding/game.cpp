@@ -4,6 +4,7 @@
 Game::Game()
 {
     this->initVariables();
+    this->initMap();
     this->initWindow();
     this->initFonts();
     this->initText();
@@ -11,7 +12,7 @@ Game::Game()
 
 Game::~Game()
 {
-    
+    delete this->window;
 }
 
 //Private Functions
@@ -23,12 +24,106 @@ void Game::initVariables()
     this->endGame = false;
     this->points = 0;
     this->lives = 3;
+    this->map.resize(14);
+    for(int i = 0;i<this->map.at(i).size();i++){
+        this->map.resize(14);
+    }
 
+}
+
+void Game::initMap()
+{
+    //Initialize the Pac Man Map!!
+    int row, col;
+    for(row = 0; row < 14; row++){
+        for(col = 0; col < 14; col++){
+            if(row == 0){
+                this->map.at(row).push_back(tiles(*this->window, 2));
+            }
+            else if(row == 1){
+                if(col == 0 || col == 13){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+            else if(row == 2 || row == 3 || row == 4){
+                if(col == 1 || col == 6 || col == 12){
+                    if(row == 3 && col == 1){
+                        this->map.at(row).push_back(tiles(*this->window, 1));
+                    }
+                    else{
+                        this->map.at(row).push_back(tiles(*this->window, 0));
+                    }
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else if(row == 5){
+                if(col == 0){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+            else if(row == 6){
+                if(col == 1 || col == 6 || col == 9){
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else if(row == 7){
+                if(col == 0 || col == 7 || col == 8 || col == 13){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+            else if(row == 8 || row == 9){
+                if(col == 6 || col == 12){
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else if(row == 10){
+                if(col <= 5 || col == 7 || col == 8){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+            else if(row == 11 || row == 12){
+                if(col == 6 || col == 9){
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+            }
+            else{
+                if(col >= 10){
+                    this->map.at(row).push_back(tiles(*this->window, 2));
+                }
+                else{
+                    this->map.at(row).push_back(tiles(*this->window, 0));
+                }
+            }
+        }
+    }
 }
 
 void Game::initWindow()
 {
-    this->videoMode.height = 768;
+    this->videoMode.height = 672;
     this->videoMode.width = 672;
     this->window = new sf::RenderWindow(this->videoMode, "Pac Man", sf::Style::Titlebar | sf::Style::Close);
 
@@ -97,13 +192,22 @@ void Game::updateText()
 void Game::update()
 {
     this->pollEvents();
-    this->updateText();
+    //this->updateText();
 }
 
 //Rendering
 void Game::renderText(sf::RenderTarget& target)
 {
     target.draw(this->uiText);
+}
+
+void Game::renderMap(sf::RenderTarget& target)
+{
+    for(int i = 0; i < this->map.size();i++){
+        for(int j = 0; j < this->map.at(i).size();j++){
+            this->map.at(i).at(j).render(*this->window, i, j);
+        }
+    }
 }
 
 void Game::render()
@@ -118,7 +222,8 @@ void Game::render()
     //Draw game objects
 
     //Render the text for the game
-    this->renderText(*this->window);
+    //this->renderText(*this->window);
+    this->renderMap(*this->window);
 
     this->window->display();
 }
