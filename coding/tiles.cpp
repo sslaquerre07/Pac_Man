@@ -45,6 +45,11 @@ const int& tiles::getType() const
     return this->type;
 }
 
+const bool& tiles::getVisited() const
+{
+    return this->visited;
+}
+
 const sf::CircleShape tiles::getCircleShape()
 {
     return this->circle;

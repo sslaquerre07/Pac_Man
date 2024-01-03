@@ -410,6 +410,7 @@ void Game::initFonts()
 
 void Game::initText()
 {
+    this->uiText.setPosition(0.f, 680.f);
     this->uiText.setFont(this->font);
     this->uiText.setCharacterSize(24);
     this->uiText.setFillColor(sf::Color::White);
@@ -454,7 +455,7 @@ void Game::updateText()
 {
     std::stringstream ss;
 
-    ss << "Points: " << this->points << "\n"
+    ss << "Points: " << this->points << "\t"
         << "Lives: " << this->lives << "\n";
     this->uiText.setString(ss.str());
 }
@@ -464,8 +465,12 @@ void Game::updateDefaultCollision()
     for(size_t i = 0; i<this->map.size();i++){
         for(size_t j = 0; j<this->map.at(i).size();j++){
             if(this->map.at(i).at(j).getType() == 0 || this->map.at(i).at(j).getType() == 1){
-                if(this->PacMan.getShape().getGlobalBounds().intersects(this->map.at(i).at(j).getCircleShape().getGlobalBounds())){
+                if(this->PacMan.getShape().getGlobalBounds().intersects(this->map.at(i).at(j).getCircleShape().getGlobalBounds()) && !this->map.at(i).at(j).getVisited()){
                     this->map.at(i).at(j).setVisited();
+                    if(this->map.at(i).at(j).getType() == 0)
+                        this->points += 10;
+                    else if(this->map.at(i).at(j).getType() == 1)
+                        this->points += 50;
                 }
             }
             else{
@@ -502,7 +507,7 @@ void Game::updateWallCollison(size_t row, size_t col)
 void Game::update()
 {
     this->pollEvents();
-    //this->updateText();
+    this->updateText();
     this->PacMan.update(this->window);
     this->updateDefaultCollision();
 }
@@ -534,7 +539,7 @@ void Game::render()
     //Draw game objects
 
     //Render the text for the game
-    //this->renderText(*this->window);
+    this->renderText(*this->window);
     this->renderMap(*this->window);
     this->PacMan.render(this->window);
 
