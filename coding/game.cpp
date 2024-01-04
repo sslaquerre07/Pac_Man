@@ -108,13 +108,21 @@ void Game::TopLeft()
                 if(col == 6 || col == 9){
                     this->map.at(row).push_back(tiles(*this->window, 0));
                 }
+                else if(col == 13){
+                    this->map.at(row).push_back(tiles(*this->window, 3));
+                }
                 else{
                     this->map.at(row).push_back(tiles(*this->window, 2));
                 }
             }
             else{
                 if(col >= 10){
-                    this->map.at(row).push_back(tiles(*this->window, 2));
+                    if(col >= 12){
+                        this->map.at(row).push_back(tiles(*this->window, 3));
+                    }
+                    else{
+                        this->map.at(row).push_back(tiles(*this->window, 2));
+                    }
                 }
                 else{
                     this->map.at(row).push_back(tiles(*this->window, 0));
@@ -197,13 +205,21 @@ void Game::TopRight()
                 if(col == 6 || col == 9){
                     this->map.at(row).push_back(tiles(*this->window, 0));
                 }
+                else if(col == 13){
+                    this->map.at(row).push_back(tiles(*this->window, 3));
+                }
                 else{
                     this->map.at(row).push_back(tiles(*this->window, 2));
                 }
             }
             else{
                 if(col >= 10){
-                    this->map.at(row).push_back(tiles(*this->window, 2));
+                    if(col >= 12){
+                        this->map.at(row).push_back(tiles(*this->window, 3));
+                    }
+                    else{
+                        this->map.at(row).push_back(tiles(*this->window, 2));
+                    }
                 }
                 else{
                     this->map.at(row).push_back(tiles(*this->window, 0));
@@ -509,6 +525,11 @@ void Game::update()
     this->pollEvents();
     this->updateText();
     this->PacMan.update(this->window);
+    this->Blinky.update();
+    this->Bluey.update();
+    this->Inky.update();
+    this->Clyde.update();
+
     this->updateDefaultCollision();
 }
 
@@ -542,6 +563,11 @@ void Game::render()
     this->renderText(*this->window);
     this->renderMap(*this->window);
     this->PacMan.render(this->window);
+    this->Blinky.render(*this->window);
+    this->Bluey.render(*this->window);
+    this->Inky.render(*this->window);
+    this->Clyde.render(*this->window);
+
 
     this->window->display();
 }

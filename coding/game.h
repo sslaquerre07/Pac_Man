@@ -9,6 +9,7 @@
 
 #include "tiles.h"
 #include "player.h"
+#include "ghost.h"
 
 
 class Game
@@ -43,7 +44,12 @@ class Game
         sf::Event ev;
         sf::VideoMode videoMode;
 
+        //Game Objects
         Player PacMan;
+        Ghost Blinky = Ghost(*this->window, 0);
+        Ghost Bluey = Ghost(*this->window, 1);
+        Ghost Inky = Ghost(*this->window, 2);
+        Ghost Clyde = Ghost(*this->window, 3);
 
         //Resources 
         sf::Font font;

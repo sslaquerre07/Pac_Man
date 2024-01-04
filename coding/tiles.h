@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
-enum TileTypes {POINTS = 0, SUPER, WALL, NROFTYPEs};
+enum TileTypes {POINTS = 0, SUPER, WALL, EMPTY};
 
 class tiles{
     public:

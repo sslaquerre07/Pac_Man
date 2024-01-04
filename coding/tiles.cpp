@@ -15,7 +15,11 @@ void tiles::initShape(const sf::RenderWindow& window)
             break;
         case WALL:
             this->rect.setSize(sf::Vector2f(24.f, 24.f));
-            this->rect.setFillColor(sf::Color::Red);
+            this->rect.setFillColor(sf::Color(18, 0, 185));
+            break;
+        case EMPTY:
+            this->rect.setSize(sf::Vector2f(24.f, 24.f));
+            this->rect.setFillColor(sf::Color::Black);
             break;
 
     }
