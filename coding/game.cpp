@@ -476,12 +476,12 @@ void Game::updateText()
     this->uiText.setString(ss.str());
 }
 
-void Game::updateDefaultCollision()
+void Game::updateDefaultCollision(sf::CircleShape& shape)
 {
     for(size_t i = 0; i<this->map.size();i++){
         for(size_t j = 0; j<this->map.at(i).size();j++){
             if(this->map.at(i).at(j).getType() == 0 || this->map.at(i).at(j).getType() == 1){
-                if(this->PacMan.getShape().getGlobalBounds().intersects(this->map.at(i).at(j).getCircleShape().getGlobalBounds()) && !this->map.at(i).at(j).getVisited()){
+                if(shape.getGlobalBounds().intersects(this->map.at(i).at(j).getCircleShape().getGlobalBounds()) && !this->map.at(i).at(j).getVisited()){
                     this->map.at(i).at(j).setVisited();
                     if(this->map.at(i).at(j).getType() == 0)
                         this->points += 10;
@@ -490,33 +490,45 @@ void Game::updateDefaultCollision()
                 }
             }
             else{
-                if(this->PacMan.getShape().getGlobalBounds().intersects(this->map.at(i).at(j).getRectShape().getGlobalBounds())){
-                    updateWallCollison(i, j);
+                if(shape.getGlobalBounds().intersects(this->map.at(i).at(j).getRectShape().getGlobalBounds())){
+                    updateWallCollison(i, j, shape);
                 }
             }
         }
     }
 }
 
-void Game::updateWallCollison(size_t row, size_t col)
+void Game::updateWallCollison(size_t row, size_t col, sf::CircleShape& shape)
 {
     float row_pos = row*24;
     float col_pos = col*24;
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
         col_pos += 25.f;
-        this->PacMan.getShape().setPosition(col_pos+1, this->PacMan.getShape().getPosition().y);
+        shape.setPosition(col_pos+1, shape.getPosition().y);
     }
     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
         col_pos -= 19.f;
-        this->PacMan.getShape().setPosition(col_pos+1, this->PacMan.getShape().getPosition().y);
+        shape.setPosition(col_pos+1, shape.getPosition().y);
     }
     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
         row_pos += 25.f;
-        this->PacMan.getShape().setPosition(this->PacMan.getShape().getPosition().x, row_pos+1);
+        shape.setPosition(shape.getPosition().x, row_pos+1);
     }
     else{
         row_pos -= 19.f;
-        this->PacMan.getShape().setPosition(this->PacMan.getShape().getPosition().x, row_pos+1);
+        shape.setPosition(shape.getPosition().x, row_pos+1);
+    }
+}
+
+void Game::updateDeathCollision(sf::CircleShape& PacMan, sf::CircleShape& Ghost)
+{
+    if(PacMan.getGlobalBounds().intersects(Ghost.getGlobalBounds())){
+        this->Blinky->getShape().setPosition(this->Blinky->getDefaultX(), this->Blinky->getDefaultY());
+        this->Pinky->getShape().setPosition(this->Pinky->getDefaultX(), this->Pinky->getDefaultY());
+        this->Inky->getShape().setPosition(this->Inky->getDefaultX(), this->Inky->getDefaultY());
+        this->Clyde->getShape().setPosition(this->Clyde->getDefaultX(), this->Clyde->getDefaultY());
+        PacMan.setPosition(24.f, 24.f);
+        this->lives -= 1;
     }
 }
 
@@ -525,12 +537,21 @@ void Game::update()
     this->pollEvents();
     this->updateText();
     this->PacMan.update(this->window);
-    this->Blinky.update();
-    this->Bluey.update();
-    this->Inky.update();
-    this->Clyde.update();
+    this->Blinky->update();
+    this->Pinky->update();
+    this->Inky->update();
+    this->Clyde->update();
 
-    this->updateDefaultCollision();
+    this->updateDefaultCollision(this->PacMan.getShape());
+    this->updateDefaultCollision(this->Blinky->getShape());
+    this->updateDefaultCollision(this->Pinky->getShape());
+    this->updateDefaultCollision(this->Inky->getShape());
+    this->updateDefaultCollision(this->Clyde->getShape());
+
+    this->updateDeathCollision(this->PacMan.getShape(), this->Blinky->getShape());
+    this->updateDeathCollision(this->PacMan.getShape(), this->Pinky->getShape());
+    this->updateDeathCollision(this->PacMan.getShape(), this->Inky->getShape());
+    this->updateDeathCollision(this->PacMan.getShape(), this->Clyde->getShape());
 }
 
 //Rendering
@@ -563,10 +584,10 @@ void Game::render()
     this->renderText(*this->window);
     this->renderMap(*this->window);
     this->PacMan.render(this->window);
-    this->Blinky.render(*this->window);
-    this->Bluey.render(*this->window);
-    this->Inky.render(*this->window);
-    this->Clyde.render(*this->window);
+    this->Blinky->render(*this->window);
+    this->Pinky->render(*this->window);
+    this->Inky->render(*this->window);
+    this->Clyde->render(*this->window);
 
 
     this->window->display();

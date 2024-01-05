@@ -14,8 +14,10 @@ class Ghost
 
         //Getters
         const int& getType();
-        const sf::CircleShape& getShape();
-
+        sf::CircleShape& getShape();
+        const float& getDefaultX();
+        const float& getDefaultY();
+        
         //Functions
         void update();
         void render(sf::RenderTarget& target);
@@ -24,6 +26,9 @@ class Ghost
     private:
         int type;
         float movementSpeed;
+
+        float defaultX;
+        float defaultY;
 
         sf::CircleShape shape;
 

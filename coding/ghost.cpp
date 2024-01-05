@@ -29,16 +29,24 @@ Ghost::Ghost(const sf::RenderWindow& window, int type): type(type)
     switch(this->type)
     {
         case BLINKY:
-            this->shape.setPosition(288.f, 312.f);
+            this->defaultX = 288.f;
+            this->defaultY = 312.f;
+            this->shape.setPosition(defaultX, defaultY);
             break;
         case PINKY:
-            this->shape.setPosition(312.f, 312.f);
+            this->defaultX = 312.f;
+            this->defaultY = 312.f;
+            this->shape.setPosition(defaultX, defaultY);
             break;
         case INKY:
-            this->shape.setPosition(336.f, 312.f);
+            this->defaultX = 336.f;
+            this->defaultY = 312.f;
+            this->shape.setPosition(defaultX, defaultY);
             break;
         case CLYDE:
-            this->shape.setPosition(360.f, 312.f);
+            this->defaultX = 360.f;
+            this->defaultY = 312.f;
+            this->shape.setPosition(defaultX, defaultY);
             break;
     }
 }
@@ -49,7 +57,7 @@ Ghost::~Ghost()
 }
 
 //Getters
-const sf::CircleShape& Ghost::getShape()
+sf::CircleShape& Ghost::getShape()
 {
     return this->shape;
 }
@@ -57,6 +65,16 @@ const sf::CircleShape& Ghost::getShape()
 const int& Ghost::getType()
 {
     return this->type;
+}
+
+const float& Ghost::getDefaultX()
+{
+    return this->defaultX;
+}
+
+const float& Ghost::getDefaultY()
+{
+    return this->defaultY;
 }
 
 //Functions
