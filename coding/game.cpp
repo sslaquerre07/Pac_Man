@@ -532,16 +532,49 @@ void Game::updateDeathCollision(sf::CircleShape& PacMan, sf::CircleShape& Ghost)
     }
 }
 
+void Game::validGhostDirections(Ghost& Ghost)
+{
+    //Left Check
+    if(this->map.at(Ghost.getCurrRow()).at(Ghost.getCurrCol()-1).getType() != 2)
+    {
+        Ghost.setGoodDirection(0);
+    }
+    //Right Check
+    if(this->map.at(Ghost.getCurrRow()).at(Ghost.getCurrCol()+1).getType() != 2)
+    {
+        Ghost.setGoodDirection(1);
+    }
+    //Up Check
+    if(this->map.at(Ghost.getCurrRow()-1).at(Ghost.getCurrCol()).getType() != 2)
+    {
+        Ghost.setGoodDirection(2);
+    }
+    //Down Check
+    if(this->map.at(Ghost.getCurrRow()+1).at(Ghost.getCurrCol()).getType() != 2)
+    {
+        Ghost.setGoodDirection(3);
+    }
+}
+
 void Game::update()
 {
     this->pollEvents();
     this->updateText();
+
+    //Updating Ghost Path
+    this->validGhostDirections(*Blinky);
+    this->validGhostDirections(*Pinky);
+    this->validGhostDirections(*Inky);
+    this->validGhostDirections(*Clyde);
+
+    //Updating movement
     this->PacMan.update(this->window);
     this->Blinky->update();
     this->Pinky->update();
     this->Inky->update();
     this->Clyde->update();
 
+    //Updating all collsions
     this->updateDefaultCollision(this->PacMan.getShape());
     this->updateDefaultCollision(this->Blinky->getShape());
     this->updateDefaultCollision(this->Pinky->getShape());

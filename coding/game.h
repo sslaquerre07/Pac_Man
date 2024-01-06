@@ -27,6 +27,7 @@ class Game
         void updateDefaultCollision(sf::CircleShape& shape);
         void updateWallCollison(size_t row, size_t col, sf::CircleShape& shape);
         void updateDeathCollision(sf::CircleShape& PacMan, sf::CircleShape& Ghost);
+        void validGhostDirections(Ghost& Ghost);
         void update();
 
         void renderText(sf::RenderTarget& target);
