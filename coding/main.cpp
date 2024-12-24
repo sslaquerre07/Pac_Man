@@ -1,5 +1,7 @@
 #include <iostream>
-#include "Game.h"
+//Must include the cpp files for subdirectory structure to work
+#include "./screen/game.h"
+#include "./screen/game.cpp"
 
 int main()
 {

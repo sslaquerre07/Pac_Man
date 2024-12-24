@@ -7,9 +7,7 @@ class Player
 {
     private:
         sf::CircleShape shape;
-
         float movementSpeed;
-
         void initVariables();
         void initShape();
 

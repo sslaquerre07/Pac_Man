@@ -7,10 +7,13 @@
 #include <vector>
 #include <sstream>
 
+//Must include cpp files for everything to work
 #include "tiles.h"
-#include "player.h"
-#include "ghost.h"
-
+#include "tiles.cpp"
+#include "..\characters\players\player.h"
+#include "..\characters\players\player.cpp"
+#include "..\characters\ghosts\ghost.h"
+#include "..\characters\ghosts\ghost.cpp"
 
 class Game
 {
@@ -33,11 +36,6 @@ class Game
         void renderText(sf::RenderTarget& target);
         void renderMap(sf::RenderTarget& target);
         void render();
-
-        void TopLeft();
-        void TopRight();
-        void BottomLeft();
-        void BottomRight();
 
     private:
         //Variables 
@@ -65,6 +63,7 @@ class Game
         unsigned lives;
 
         //Game objects
+        std::vector<std::vector<int>> bitmap;
         std::vector<std::vector<tiles>> map;
 
         //Private Functions

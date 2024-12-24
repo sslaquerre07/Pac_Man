@@ -9,7 +9,7 @@ void Player::initVariables()
 void Player::initShape()
 {
     this->shape.setFillColor(sf::Color::Yellow);
-    this->shape.setRadius(9.f);
+    this->shape.setRadius(10.f);
 }
 
 //Constructors and Destructor

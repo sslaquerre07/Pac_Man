@@ -181,7 +181,7 @@ void Ghost::update()
             break;
         case CLYDE:
             //if(this->ClydeSwitchTimer())
-            this->updateClydeDirection();
+            // this->updateClydeDirection();
             break;
     }
     this->shape.setPosition(this->shape.getPosition().x + this->movementSpeedX, this->shape.getPosition().y + this->movementSpeedY);
