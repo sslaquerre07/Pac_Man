@@ -36,7 +36,7 @@ class Game
         void pollEvents();
         void updateText();
         void updateDefaultCollision(sf::CircleShape& shape);
-        void updateWallCollison(size_t row, size_t col, sf::CircleShape& shape);
+        void updateWallCollison(std::vector<bool> flags, size_t row, size_t col, sf::CircleShape& shape);
         void updateDeathCollision(sf::CircleShape& PacMan, sf::CircleShape& Ghost);
         void validGhostDirections(Ghost& Ghost);
         void update();
@@ -77,7 +77,9 @@ class Game
         void initWindow();
         void initFonts();
         void initText();
-
+        double map_to_coord(int map_pos);
+        int coord_to_map(double coord);
+        std::vector<bool> flagCollisions(sf::CircleShape shape);
 };
 
 

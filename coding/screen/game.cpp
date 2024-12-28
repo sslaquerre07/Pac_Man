@@ -103,6 +103,14 @@ void Game::initText()
     this->uiText.setString("NONE");
 }
 
+double Game::map_to_coord(int map_pos){
+    return (double) map_pos*24.0;
+}
+
+int Game::coord_to_map(double coord){
+    return floor(coord/24);
+}
+
 //Getters
 const bool Game::running() const
 {
@@ -149,11 +157,16 @@ void Game::updateText()
 
 void Game::updateDefaultCollision(sf::CircleShape& shape)
 {
+    //Calculations below can cause errors if going out of bounds left or right, so check for that first
+    if(shape.getGlobalBounds().getPosition().x < 0){
+        shape.setPosition(648, 312);
+    }
+    else if(shape.getGlobalBounds().getPosition().x >= 654){
+        shape.setPosition(0, 312);
+    }
     //Get the row and column that PacMan is in
-    int row = floor(shape.getGlobalBounds().getPosition().y/24);
-    int y_overflow = remainder(shape.getGlobalBounds().getPosition().y, 24);
-    int col = floor(shape.getGlobalBounds().getPosition().x/24);
-    int x_overflow = remainder(shape.getGlobalBounds().getPosition().x, 24);
+    int row = coord_to_map(shape.getGlobalBounds().getPosition().y);
+    int col = coord_to_map(shape.getGlobalBounds().getPosition().x);
     //Regular point tile
     if(bitmap.at(row).at(col) == 0 && !map.at(row).at(col).getVisited()){
         map.at(row).at(col).setVisited();
@@ -166,40 +179,99 @@ void Game::updateDefaultCollision(sf::CircleShape& shape)
         //Eventually, also turn the ghosts into panic mode
     }
     //Wall collisions
-    else if(bitmap.at(row).at(col) == 2 || y_overflow > 6 || x_overflow > 6){
-        //Check if wall check is needed if either of the overflow conditions met
-        if(y_overflow > 6 && map.at(row+1).at(col).getType() != 2){
-            //Nothing happens here
-        }
-        else if(x_overflow > 6 && map.at(row).at(col+1).getType() != 2){
-            //Nothing happens here either
-        }
-        else{
-            //If first two conditions not met, wall collison should occur
-            updateWallCollison(row, col, shape);
+    std::vector<bool> collisionFlags = flagCollisions(shape);
+    for(int i = 0; i < collisionFlags.size(); i++){
+        if(collisionFlags.at(i)){
+            updateWallCollison(collisionFlags, row, col, shape);
+            return;
         }
     }
+}
 
+//Used to flag all kinds of collisions (Even when a corner is caught)
+std::vector<bool> Game::flagCollisions(sf::CircleShape shape){
+    std::vector<bool> flags = {false, false, false, false};
+    float origin_x = shape.getGlobalBounds().getPosition().x;
+    float origin_y = shape.getGlobalBounds().getPosition().y;
+    //Top left
+    if(bitmap.at(coord_to_map(origin_y)).at(coord_to_map(origin_x)) == 2){
+        flags.at(0) = true;
+    } 
+    //Top right
+    if(bitmap.at(coord_to_map(origin_y)).at(coord_to_map(origin_x+18)) == 2){
+        flags.at(1) = true;
+    }
+    //Bottom right
+    if(bitmap.at(coord_to_map(origin_y+18)).at(coord_to_map(origin_x+18)) == 2){
+        flags.at(2) = true;
+    }
+    //Bottom left
+    if(bitmap.at(coord_to_map(origin_y+18)).at(coord_to_map(origin_x)) == 2){
+        flags.at(3) = true;
+    }
+    return flags;
 }
 
 //Handle any kind of wall collision (Works for everything except corners)
-void Game::updateWallCollison(size_t row, size_t col, sf::CircleShape& shape)
+void Game::updateWallCollison(std::vector<bool> flags, size_t row, size_t col, sf::CircleShape& shape)
 {
-    float row_pos = row*24;
-    float col_pos = col*24;
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-        col_pos += 24.f;
-        shape.setPosition(col_pos, shape.getPosition().y);
+    //Will be a messy bunch of if statements for now, until a better solution is derived
+    float row_pos = map_to_coord(row);
+    float col_pos = map_to_coord(col);
+    //Top right corner collision
+    if(flags.at(0) && flags.at(1) && flags.at(2)){
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+            shape.setPosition(shape.getPosition().x - 1, shape.getPosition().y);
+        }
+        else{
+            shape.setPosition(shape.getPosition().x, shape.getPosition().y + 1);
+        }
     }
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-        shape.setPosition(col_pos+6, shape.getPosition().y);
+    //Top left corner collision
+    else if(flags.at(0) && flags.at(1) && flags.at(3)){
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+            shape.setPosition(shape.getPosition().x + 1, shape.getPosition().y);
+        }
+        else{
+            shape.setPosition(shape.getPosition().x, shape.getPosition().y + 1);
+        }
     }
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-        row_pos += 24.f;
-        shape.setPosition(shape.getPosition().x, row_pos);
+    //Bottom left corner collision
+    else if(flags.at(0) && flags.at(2) && flags.at(3)){
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+            shape.setPosition(shape.getPosition().x + 1, shape.getPosition().y);
+        }
+        else{
+            shape.setPosition(shape.getPosition().x, shape.getPosition().y - 1);
+        }
+    }
+    //Bottom right corner collision
+    else if(flags.at(1) && flags.at(2) && flags.at(3)){
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+            shape.setPosition(shape.getPosition().x - 1, shape.getPosition().y);
+        }
+        else{
+            shape.setPosition(shape.getPosition().x, shape.getPosition().y - 1);
+        }
+    }
+    //Left collision
+    else if(flags.at(0) && flags.at(3)){
+        shape.setPosition(shape.getPosition().x + 1, shape.getPosition().y);
+    }
+    //Right collision
+    else if(flags.at(1) && flags.at(2)){
+        shape.setPosition(shape.getPosition().x - 1, shape.getPosition().y);
+    }
+    //Top collision
+    else if(flags.at(0) && flags.at(1)){
+        shape.setPosition(shape.getPosition().x, shape.getPosition().y + 1);
+    }
+    //Bottom collsion
+    else if(flags.at(2) && flags.at(3)){
+        shape.setPosition(shape.getPosition().x, shape.getPosition().y - 1);
     }
     else{
-        shape.setPosition(shape.getPosition().x, row_pos+6);
+        shape.setPosition(shape.getPosition().x, shape.getPosition().y - 1);
     }
 }
 

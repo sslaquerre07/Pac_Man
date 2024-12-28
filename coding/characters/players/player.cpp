@@ -35,6 +35,10 @@ sf::CircleShape& Player::getShape()
     return this->shape;
 }
 
+const float Player::getMovementSpeed(){
+    return movementSpeed;
+}
+
 //Functions
 void Player::updateInput()
 {

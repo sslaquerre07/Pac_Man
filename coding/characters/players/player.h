@@ -17,6 +17,7 @@ class Player
 
         //Accessors
         sf::CircleShape& getShape();
+        const float getMovementSpeed();
 
         //Functions
         void updateInput();
