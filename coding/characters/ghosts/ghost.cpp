@@ -1,56 +1,15 @@
+#ifndef GHOST_CPP
+#define GHOST_CPP
+
 #include "ghost.h"
 
-//Private Functions
-void Ghost::initshape()
-{
-    switch(this->type)
-    {
-        case BLINKY:
-            this->shape.setFillColor(sf::Color(255, 57, 57));
-            break;
-        case PINKY:
-            this->shape.setFillColor(sf::Color(255, 153, 204));
-            break;
-        case INKY:
-            this->shape.setFillColor(sf::Color(0, 239, 239));
-            break;
-        case CLYDE:
-            this->shape.setFillColor(sf::Color(255, 204, 51));
-            break;
-    }
-    this->shape.setRadius(9.f);
-}
-
 //Constructors and Destructor
-Ghost::Ghost(const sf::RenderWindow& window, int type): type(type)
+Ghost::Ghost(const sf::RenderWindow& window)
 {   
     this->movementSpeedX = 0.f;
     this->movementSpeedY = 0.f;
-    this->initshape();
     this->validDirections = {0,0,0,0};
-    switch(this->type)
-    {
-        case BLINKY:
-            this->defaultX = 290.f;
-            this->defaultY = 314.f;
-            this->shape.setPosition(defaultX, defaultY);
-            break;
-        case PINKY:
-            this->defaultX = 314.f;
-            this->defaultY = 314.f;
-            this->shape.setPosition(defaultX, defaultY);
-            break;
-        case INKY:
-            this->defaultX = 338.f;
-            this->defaultY = 314.f;
-            this->shape.setPosition(defaultX, defaultY);
-            break;
-        case CLYDE:
-            this->defaultX = 362.f;
-            this->defaultY = 314.f;
-            this->shape.setPosition(defaultX, defaultY);
-            break;
-    }
+    this->shape.setRadius(9.f);
 }
 
 Ghost::~Ghost()
@@ -141,49 +100,8 @@ void Ghost::setDirection(const int& index)
     }
 }
 
-//Functions
-void Ghost::updateClydeDirection()
-{
-    int index;
-    do{
-        index = rand() % 4;
-    }while(!this->validDirections.at(index));
-    this->setDirection(index);
-}
-
-int Ghost::ClydeSwitchTimer()
-{
-    sf::Clock clock;
-    sf::Time interval = sf::seconds(1.0f); // Set the interval to 5 seconds
-    sf::Time elapsed = sf::Time::Zero;
-
-    // Update elapsed time
-    elapsed += clock.restart();
-
-    // Check if the interval has passed
-    if (elapsed >= interval) {
-        elapsed = sf::Time::Zero; // Reset the elapsed time
-        return 1;
-    }
-    return 0;
-
-}
-
 void Ghost::update()
 {
-    switch(this->type)
-    {
-        case BLINKY:
-            break;
-        case PINKY:
-            break;
-        case INKY:
-            break;
-        case CLYDE:
-            //if(this->ClydeSwitchTimer())
-            // this->updateClydeDirection();
-            break;
-    }
     this->shape.setPosition(this->shape.getPosition().x + this->movementSpeedX, this->shape.getPosition().y + this->movementSpeedY);
 }
 
@@ -191,3 +109,5 @@ void Ghost::render(sf::RenderTarget& target)
 {
     target.draw(this->shape);
 }
+
+#endif

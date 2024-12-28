@@ -3,15 +3,14 @@
 
 #include <SFML/Graphics.hpp>
 #include <cmath>
-
-enum GhostType {BLINKY = 0, PINKY, INKY, CLYDE};
+#include "./pathSetting/pathStrategy.h"
 
 class Ghost
 {
     public:
         //Constructors and Destructor 
-        Ghost(const sf::RenderWindow& window, int type);
-        ~Ghost();
+        Ghost(const sf::RenderWindow& window);
+        virtual ~Ghost();
 
         //Getters
         const int& getType();
@@ -27,26 +26,21 @@ class Ghost
         void setDirection(const int& index);
         
         //Functions
-        void updateClydeDirection();
-        int ClydeSwitchTimer();
         void update();
-
-
         void render(sf::RenderTarget& target);
+        void setPath();
 
-
-    private:
+    protected:
+        //Data members
         int type;
         float movementSpeedX;
         float movementSpeedY;
         std::vector<int> validDirections;
-
         float defaultX;
         float defaultY;
-
         sf::CircleShape shape;
-
-        void initshape();
+        //Path Strategy set dynamically for the different ghosts
+        PathStrategy* strategy;
 };
 
 

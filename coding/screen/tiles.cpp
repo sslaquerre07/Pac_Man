@@ -1,3 +1,6 @@
+#ifndef TILES_CPP
+#define TILES_CPP
+
 #include "tiles.h"
 
 //initialization
@@ -96,3 +99,5 @@ void tiles::render(sf::RenderTarget& target, int& row, int& col)
     }
 
 }
+
+#endif

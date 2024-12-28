@@ -10,10 +10,18 @@
 //Must include cpp files for everything to work
 #include "tiles.h"
 #include "tiles.cpp"
-#include "..\characters\players\player.h"
-#include "..\characters\players\player.cpp"
-#include "..\characters\ghosts\ghost.h"
-#include "..\characters\ghosts\ghost.cpp"
+#include "../characters/players/player.h"
+#include "../characters/players/player.cpp"
+#include "../characters/ghosts/ghost.h"
+#include "../characters/ghosts/ghost.cpp"
+#include "../characters/ghosts/Blinky.h"
+#include "../characters/ghosts/Blinky.cpp"
+#include "../characters/ghosts/Inky.h"
+#include "../characters/ghosts/Inky.cpp"
+#include "../characters/ghosts/Pinky.h"
+#include "../characters/ghosts/Pinky.cpp"
+#include "../characters/ghosts/Clyde.h"
+#include "../characters/ghosts/Clyde.cpp"
 
 class Game
 {
@@ -46,10 +54,7 @@ class Game
 
         //Game Objects
         Player PacMan;
-        Ghost* Blinky = new Ghost(*this->window, 0);
-        Ghost* Pinky = new Ghost(*this->window, 1);
-        Ghost* Inky = new Ghost(*this->window, 2);
-        Ghost* Clyde = new Ghost(*this->window, 3);
+        std::vector<Ghost*> ghosts;
 
         //Resources 
         sf::Font font;

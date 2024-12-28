@@ -1,3 +1,6 @@
+#ifndef GAME_CPP
+#define GAME_CPP
+
 #include "Game.h"
 #include <math.h>
 
@@ -35,6 +38,11 @@ Game::Game()
                     {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}};
     // Setup basic variables
     this->initVariables();
+    //Ghost setup
+    this->ghosts.push_back(new Inky(*this->window));
+    this->ghosts.push_back(new Blinky(*this->window));
+    this->ghosts.push_back(new Pinky(*this->window));
+    this->ghosts.push_back(new Clyde(*this->window));
     //Based on bitmap
     this->initMap();
     //Standard SFML setup
@@ -199,10 +207,9 @@ void Game::updateWallCollison(size_t row, size_t col, sf::CircleShape& shape)
 void Game::updateDeathCollision(sf::CircleShape& PacMan, sf::CircleShape& Ghost)
 {
     if(PacMan.getGlobalBounds().intersects(Ghost.getGlobalBounds())){
-        this->Blinky->getShape().setPosition(this->Blinky->getDefaultX(), this->Blinky->getDefaultY());
-        this->Pinky->getShape().setPosition(this->Pinky->getDefaultX(), this->Pinky->getDefaultY());
-        this->Inky->getShape().setPosition(this->Inky->getDefaultX(), this->Inky->getDefaultY());
-        this->Clyde->getShape().setPosition(this->Clyde->getDefaultX(), this->Clyde->getDefaultY());
+        for(int i = 0; i < this->ghosts.size(); i++){
+            this->ghosts.at(i)->getShape().setPosition(this->ghosts.at(i)->getDefaultX(), this->ghosts.at(i)->getDefaultY());
+        }
         PacMan.setPosition(24.f, 24.f);
         this->lives -= 1;
     }
@@ -237,30 +244,21 @@ void Game::update()
     this->pollEvents();
     this->updateText();
 
-    //Updating Ghost Path
-    this->validGhostDirections(*Blinky);
-    this->validGhostDirections(*Pinky);
-    this->validGhostDirections(*Inky);
-    this->validGhostDirections(*Clyde);
+    //Updating Ghost Data
+    for(int i = 0; i<ghosts.size(); i++){
+        //Updating direction
+        validGhostDirections(*ghosts.at(i));
+        //Updating ghost position
+        ghosts.at(i)->update();
+        //Checking for collisions
+        updateDefaultCollision(ghosts.at(i)->getShape());
+        updateDeathCollision(PacMan.getShape(), ghosts.at(i)->getShape());
+    }
 
-    //Updating movement
+    //Doing the same for pacman
     this->PacMan.update(this->window);
-    this->Blinky->update();
-    this->Pinky->update();
-    this->Inky->update();
-    this->Clyde->update();
-
-    //Updating all collsions
     this->updateDefaultCollision(this->PacMan.getShape());
-    this->updateDefaultCollision(this->Blinky->getShape());
-    this->updateDefaultCollision(this->Pinky->getShape());
-    this->updateDefaultCollision(this->Inky->getShape());
-    this->updateDefaultCollision(this->Clyde->getShape());
-
-    this->updateDeathCollision(this->PacMan.getShape(), this->Blinky->getShape());
-    this->updateDeathCollision(this->PacMan.getShape(), this->Pinky->getShape());
-    this->updateDeathCollision(this->PacMan.getShape(), this->Inky->getShape());
-    this->updateDeathCollision(this->PacMan.getShape(), this->Clyde->getShape());
+    
 }
 
 //Rendering
@@ -293,11 +291,10 @@ void Game::render()
     this->renderText(*this->window);
     this->renderMap(*this->window);
     this->PacMan.render(this->window);
-    this->Blinky->render(*this->window);
-    this->Pinky->render(*this->window);
-    this->Inky->render(*this->window);
-    this->Clyde->render(*this->window);
-
-
+    for(int i = 0; i<ghosts.size(); i++){
+        ghosts.at(i)->render(*this->window);
+    }
     this->window->display();
 }
+
+#endif

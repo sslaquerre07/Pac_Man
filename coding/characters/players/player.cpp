@@ -1,3 +1,6 @@
+#ifndef PLAYER_CPP
+#define PLAYER_CPP
+
 #include "player.h"
 
 //Private Functions
@@ -69,3 +72,5 @@ void Player::render(sf::RenderTarget* target)
 {
     target->draw(this->shape);
 }
+
+#endif
