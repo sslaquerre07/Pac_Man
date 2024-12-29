@@ -2,16 +2,12 @@
 #define PATHSTRATEGY_H
 #include <SFML/Graphics.hpp>
 #include <chrono>
+#include <math.h>
 
 //Interface that implements Strategy pattern for ghost movement
 class PathStrategy{
-    protected:
-        std::chrono::time_point<std::chrono::steady_clock> start_time;
-
     public:
-        virtual void setPath(const sf::Shape& src, const sf::Shape& dest) = 0;
-        void start();
-        void check_timer(int seconds, const sf::Shape& src, const sf::Shape& dest);
+        virtual std::vector<std::vector<int>> setPath(const sf::Shape& src, const sf::Shape& dest, const std::vector<std::vector<int>>& bitmap) = 0;
 };
 
 #endif

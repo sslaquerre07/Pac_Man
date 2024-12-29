@@ -8,6 +8,7 @@ Clyde::Clyde(const sf::RenderWindow& window): Ghost(window){
     this->defaultY = 314.f;
     this->shape.setPosition(defaultX, defaultY);
     this->strategy = new Randomized();
+    //Orange ghost
     this->shape.setFillColor(sf::Color(255, 204, 51));
 }
 

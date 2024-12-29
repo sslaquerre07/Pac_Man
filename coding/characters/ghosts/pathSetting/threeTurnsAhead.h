@@ -4,7 +4,7 @@
 
 class ThreeTurnsAhead: public PathStrategy{
     public:
-        void setPath(const sf::Shape& src, const sf::Shape& dest) override;
+        std::vector<std::vector<int>> setPath(const sf::Shape& src, const sf::Shape& dest, const std::vector<std::vector<int>>& bitmap) override;
 };
 
 #endif

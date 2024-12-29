@@ -9,6 +9,7 @@ Blinky::Blinky(const sf::RenderWindow& window): Ghost(window){
     this->defaultY = 314.f;
     this->shape.setPosition(defaultX, defaultY);
     this->strategy = new ShortestPath();
+    //Red Ghost
     this->shape.setFillColor(sf::Color(255, 57, 57));
 }
 

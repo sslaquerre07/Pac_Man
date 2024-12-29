@@ -3,6 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 #include <math.h>
+#include "../../screen/tiles.h"
+#include "../../screen/tiles.cpp"
 
 class Player
 {

@@ -1,6 +1,7 @@
 #ifndef GHOST_H
 #define GHOST_H
 
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include "./pathSetting/pathStrategy.h"
@@ -26,9 +27,10 @@ class Ghost
         void setDirection(const int& index);
         
         //Functions
+        void updateWallCollisions(const std::vector<std::vector<int>>& bitmap, const std::vector<bool>& flags);
         void update();
         void render(sf::RenderTarget& target);
-        void setPath();
+        void setPath(sf::CircleShape& pacman, const std::vector<std::vector<int>>& bitmap);
 
     protected:
         //Data members
@@ -36,6 +38,7 @@ class Ghost
         float movementSpeedX;
         float movementSpeedY;
         std::vector<int> validDirections;
+        std::vector<std::vector<int>> path;
         float defaultX;
         float defaultY;
         sf::CircleShape shape;

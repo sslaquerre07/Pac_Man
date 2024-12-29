@@ -9,6 +9,7 @@ Inky::Inky(const sf::RenderWindow& window): Ghost(window){
     this->defaultY = 314.f;
     this->shape.setPosition(defaultX, defaultY);
     this->strategy = new ThreeTurnsAhead();
+    //Blue Ghost
     this->shape.setFillColor(sf::Color(0, 239, 239));
 }
 

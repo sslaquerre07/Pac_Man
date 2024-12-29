@@ -8,6 +8,7 @@ Pinky::Pinky(const sf::RenderWindow& window):Ghost(window){
     this->defaultY = 314.f;
     this->shape.setPosition(defaultX, defaultY);
     this->strategy = new Randomized();
+    //Pink Ghost
     this->shape.setFillColor(sf::Color(255, 153, 204));
 }
 

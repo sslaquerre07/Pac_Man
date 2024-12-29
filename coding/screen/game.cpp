@@ -20,8 +20,8 @@ Game::Game()
                     {2,2,2,2,2,2,0,2,2,2,2,0,2,2,2,2,0,2,2,2,2,0,2,2,2,2,2,2},
                     {2,2,2,2,2,2,0,2,2,2,2,0,2,2,2,2,0,2,2,2,2,0,2,2,2,2,2,2},
                     {2,2,2,2,2,2,0,2,2,0,0,0,0,0,0,0,0,0,0,2,2,0,2,2,2,2,2,2},
-                    {2,2,2,2,2,2,0,2,2,0,2,2,2,3,3,2,2,2,0,2,2,0,2,2,2,2,2,2},
-                    {2,2,2,2,2,2,0,2,2,0,2,2,2,3,3,2,2,2,0,2,2,0,2,2,2,2,2,2},
+                    {2,2,2,2,2,2,0,2,2,0,2,2,3,3,3,3,2,2,0,2,2,0,2,2,2,2,2,2},
+                    {2,2,2,2,2,2,0,2,2,0,2,2,3,3,3,3,2,2,0,2,2,0,2,2,2,2,2,2},
                     {0,0,0,0,0,0,0,0,0,0,2,2,3,3,3,3,2,2,0,0,0,0,0,0,0,0,0,0},
                     {2,2,2,2,2,2,0,2,2,0,2,2,2,2,2,2,2,2,0,2,2,0,2,2,2,2,2,2},
                     {2,2,2,2,2,2,0,2,2,0,2,2,2,2,2,2,2,2,0,2,2,0,2,2,2,2,2,2},
@@ -227,7 +227,12 @@ void Game::update()
         //Updating ghost position
         ghosts.at(i)->update();
         //Checking for collisions
-        //Check for ghost collisions here
+        std::vector<bool> flags = flagCollisions(ghosts.at(i)->getShape());
+        ghosts.at(i)->updateWallCollisions(bitmap, flags);
+        //Set new path if any collision has occurred
+        if(flags.at(0) || flags.at(1) || flags.at(2) || flags.at(3)){
+            ghosts.at(i)->setPath(PacMan.getShape(), bitmap); //Hard set for now, but later each ghost will call this uniquely
+        }
         updateDeathCollision(PacMan.getShape(), ghosts.at(i)->getShape());
     }
 
