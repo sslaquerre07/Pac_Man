@@ -35,8 +35,6 @@ class Game
         //Functions
         void pollEvents();
         void updateText();
-        void updateDefaultCollision(sf::CircleShape& shape);
-        void updateWallCollison(std::vector<bool> flags, size_t row, size_t col, sf::CircleShape& shape);
         void updateDeathCollision(sf::CircleShape& PacMan, sf::CircleShape& Ghost);
         void validGhostDirections(Ghost& Ghost);
         void update();
@@ -64,8 +62,8 @@ class Game
 
         //Game Logic (Requires initialization)
         bool endGame;
-        unsigned points;
-        unsigned lives;
+        int points;
+        int lives;
 
         //Game objects
         std::vector<std::vector<int>> bitmap;

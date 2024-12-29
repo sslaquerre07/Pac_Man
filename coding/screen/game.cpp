@@ -155,39 +155,6 @@ void Game::updateText()
     this->uiText.setString(ss.str());
 }
 
-void Game::updateDefaultCollision(sf::CircleShape& shape)
-{
-    //Calculations below can cause errors if going out of bounds left or right, so check for that first
-    if(shape.getGlobalBounds().getPosition().x < 0){
-        shape.setPosition(648, 312);
-    }
-    else if(shape.getGlobalBounds().getPosition().x >= 654){
-        shape.setPosition(0, 312);
-    }
-    //Get the row and column that PacMan is in
-    int row = coord_to_map(shape.getGlobalBounds().getPosition().y);
-    int col = coord_to_map(shape.getGlobalBounds().getPosition().x);
-    //Regular point tile
-    if(bitmap.at(row).at(col) == 0 && !map.at(row).at(col).getVisited()){
-        map.at(row).at(col).setVisited();
-        points += 10;
-    }
-    //Superball
-    else if(bitmap.at(row).at(col) == 1 && !map.at(row).at(col).getVisited()){
-        map.at(row).at(col).setVisited();
-        points += 50;
-        //Eventually, also turn the ghosts into panic mode
-    }
-    //Wall collisions
-    std::vector<bool> collisionFlags = flagCollisions(shape);
-    for(int i = 0; i < collisionFlags.size(); i++){
-        if(collisionFlags.at(i)){
-            updateWallCollison(collisionFlags, row, col, shape);
-            return;
-        }
-    }
-}
-
 //Used to flag all kinds of collisions (Even when a corner is caught)
 std::vector<bool> Game::flagCollisions(sf::CircleShape shape){
     std::vector<bool> flags = {false, false, false, false};
@@ -210,69 +177,6 @@ std::vector<bool> Game::flagCollisions(sf::CircleShape shape){
         flags.at(3) = true;
     }
     return flags;
-}
-
-//Handle any kind of wall collision (Works for everything except corners)
-void Game::updateWallCollison(std::vector<bool> flags, size_t row, size_t col, sf::CircleShape& shape)
-{
-    //Will be a messy bunch of if statements for now, until a better solution is derived
-    float row_pos = map_to_coord(row);
-    float col_pos = map_to_coord(col);
-    //Top right corner collision
-    if(flags.at(0) && flags.at(1) && flags.at(2)){
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-            shape.setPosition(shape.getPosition().x - 1, shape.getPosition().y);
-        }
-        else{
-            shape.setPosition(shape.getPosition().x, shape.getPosition().y + 1);
-        }
-    }
-    //Top left corner collision
-    else if(flags.at(0) && flags.at(1) && flags.at(3)){
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-            shape.setPosition(shape.getPosition().x + 1, shape.getPosition().y);
-        }
-        else{
-            shape.setPosition(shape.getPosition().x, shape.getPosition().y + 1);
-        }
-    }
-    //Bottom left corner collision
-    else if(flags.at(0) && flags.at(2) && flags.at(3)){
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-            shape.setPosition(shape.getPosition().x + 1, shape.getPosition().y);
-        }
-        else{
-            shape.setPosition(shape.getPosition().x, shape.getPosition().y - 1);
-        }
-    }
-    //Bottom right corner collision
-    else if(flags.at(1) && flags.at(2) && flags.at(3)){
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-            shape.setPosition(shape.getPosition().x - 1, shape.getPosition().y);
-        }
-        else{
-            shape.setPosition(shape.getPosition().x, shape.getPosition().y - 1);
-        }
-    }
-    //Left collision
-    else if(flags.at(0) && flags.at(3)){
-        shape.setPosition(shape.getPosition().x + 1, shape.getPosition().y);
-    }
-    //Right collision
-    else if(flags.at(1) && flags.at(2)){
-        shape.setPosition(shape.getPosition().x - 1, shape.getPosition().y);
-    }
-    //Top collision
-    else if(flags.at(0) && flags.at(1)){
-        shape.setPosition(shape.getPosition().x, shape.getPosition().y + 1);
-    }
-    //Bottom collsion
-    else if(flags.at(2) && flags.at(3)){
-        shape.setPosition(shape.getPosition().x, shape.getPosition().y - 1);
-    }
-    else{
-        shape.setPosition(shape.getPosition().x, shape.getPosition().y - 1);
-    }
 }
 
 //Handles collisions with the ghosts (Just live ones for now)
@@ -323,13 +227,13 @@ void Game::update()
         //Updating ghost position
         ghosts.at(i)->update();
         //Checking for collisions
-        updateDefaultCollision(ghosts.at(i)->getShape());
+        //Check for ghost collisions here
         updateDeathCollision(PacMan.getShape(), ghosts.at(i)->getShape());
     }
 
     //Doing the same for pacman
     this->PacMan.update(this->window);
-    this->updateDefaultCollision(this->PacMan.getShape());
+    this->PacMan.updateAllCollisions(bitmap, map, points, flagCollisions(this->PacMan.getShape()));
     
 }
 
