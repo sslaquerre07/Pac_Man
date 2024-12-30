@@ -43,6 +43,10 @@ Game::Game()
     this->ghosts.push_back(new Blinky(*this->window));
     this->ghosts.push_back(new Pinky(*this->window));
     this->ghosts.push_back(new Clyde(*this->window));
+    //Initialize the paths as well
+    for(int i = 0; i < 4; i++){
+        this->ghosts.at(i)->setPath(PacMan.getShape(), bitmap);
+    }
     //Based on bitmap
     this->initMap();
     //Standard SFML setup
@@ -222,17 +226,13 @@ void Game::update()
 
     //Updating Ghost Data
     for(int i = 0; i<ghosts.size(); i++){
-        //Updating direction
-        validGhostDirections(*ghosts.at(i));
-        //Updating ghost position
-        ghosts.at(i)->update();
-        //Checking for collisions
+        // //Checking for collisions
         std::vector<bool> flags = flagCollisions(ghosts.at(i)->getShape());
-        ghosts.at(i)->updateWallCollisions(bitmap, flags);
-        //Set new path if any collision has occurred
         if(flags.at(0) || flags.at(1) || flags.at(2) || flags.at(3)){
-            ghosts.at(i)->setPath(PacMan.getShape(), bitmap); //Hard set for now, but later each ghost will call this uniquely
+            ghosts.at(i)->updateWallCollisions(bitmap, flags);
+            ghosts.at(i)->setPath(PacMan.getShape(), bitmap); 
         }
+        ghosts.at(i)->update();
         updateDeathCollision(PacMan.getShape(), ghosts.at(i)->getShape());
     }
 

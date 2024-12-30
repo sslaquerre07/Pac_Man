@@ -8,13 +8,35 @@ Ghost::Ghost(const sf::RenderWindow& window)
 {   
     this->movementSpeedX = 0.f;
     this->movementSpeedY = 0.f;
-    this->validDirections = {0,0,0,0};
     this->shape.setRadius(9.f);
 }
 
 Ghost::~Ghost()
 {
 
+}
+
+//Private functions
+//Sees if the ghost is in position to move to its next corner
+bool Ghost::inPosistion(){
+    const std::vector<int>& next_corner = path.at(0);
+    const float& curr_x = shape.getGlobalBounds().getPosition().x;
+    const float& curr_y = shape.getGlobalBounds().getPosition().y;
+    //Now, check all corners and make sure they are in the correct frame to progress
+    if(floor((curr_x)/24) != next_corner.at(0) || floor((curr_y)/24) != next_corner.at(1)){
+        return false;
+    }
+    if(floor((curr_x+18)/24) != next_corner.at(0) || floor((curr_y)/24) != next_corner.at(1)){
+        return false;
+    }
+    if(floor((curr_x+18)/24) != next_corner.at(0) || floor((curr_y+18)/24) != next_corner.at(1)){
+        return false;
+    }
+    if(floor((curr_x)/24) != next_corner.at(0) || floor(curr_y+18/24) != next_corner.at(1)){
+        return false;
+    }
+    //If none of the above conditions are met, the ghost is in its required tile
+    return true;
 }
 
 //Getters
@@ -78,30 +100,32 @@ void Ghost::setDirection(const int& index)
     switch(index)
     {
         case 0:
-            this->movementSpeedX = -0.1f;
-            this->movementSpeedY = 0.f;
+            this->movementSpeedX = -0.5;
+            this->movementSpeedY = 0;
             break;
         case 1:
-            this->movementSpeedX = 0.1f;
-            this->movementSpeedY = 0.f;
+            this->movementSpeedX = 0.5;
+            this->movementSpeedY = 0;
             break;
         case 2:
-            this->movementSpeedX = 0.f;
-            this->movementSpeedY = 0.1f;
+            this->movementSpeedX = 0;
+            this->movementSpeedY = 0.5;
             break;
         case 3:
-            this->movementSpeedX = 0.f;
-            this->movementSpeedY = -0.1f;
+            this->movementSpeedX = 0;
+            this->movementSpeedY = -0.5;
             break;
         case 10:
-            this->movementSpeedX = 0.f;
-            this->movementSpeedY = 0.f;
+            this->movementSpeedX = 0;
+            this->movementSpeedY = 0;
+            break;
+        default:
+            std::cout << "Invalid index provided: " << index << std::endl;
             break;
     }
 }
 
 void Ghost::setPath(sf::CircleShape& pacman, const std::vector<std::vector<int>>& bitmap){
-    //Checks if the timer went off, and if so sets the new path accordingly
     path = strategy->setPath(shape, pacman, bitmap);
 }
 
@@ -169,25 +193,32 @@ void Ghost::update()
     int curr_col = floor(shape.getGlobalBounds().getPosition().x/24);
     int curr_row = floor(shape.getGlobalBounds().getPosition().y/24);
     //Check first to see if there are elements in the path list
-    if(path.empty()){
+    if(path.empty() || inPosistion()){
         //Should never occur, but ghosts should stop if it does
         setDirection(10);
     }
     else{
-        std::vector<int> next_corner = path.at(path.size()-1);
+        std::vector<int> next_corner = path.at(0);
+        //If the origin is in the right spot but not quite in position yet
+        if(next_corner.at(0) == curr_row && next_corner.at(1) == curr_col){
+            //Nothing to be done, just keep doing what you're doing
+        }
         //Check if movement is required in the x direction
-        if(next_corner.at(0) == curr_row){
+        else if(next_corner.at(0) == curr_row){
             //Need to move left
             if(next_corner.at(1) < curr_col){setDirection(0);}
             //Right
             else{setDirection(1);}
         }
         //Movement required in the y direction
-        else{
+        else if(next_corner.at(1) == curr_col){
             //Need to move up
             if(next_corner.at(0) < curr_row){setDirection(3);}
             //Down
             else{setDirection(2);}
+        }
+        else{
+            setDirection(10);
         }
     }
     this->shape.setPosition(this->shape.getPosition().x + this->movementSpeedX, this->shape.getPosition().y + this->movementSpeedY);

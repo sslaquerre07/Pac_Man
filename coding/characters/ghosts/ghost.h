@@ -44,6 +44,9 @@ class Ghost
         sf::CircleShape shape;
         //Path Strategy set dynamically for the different ghosts
         PathStrategy* strategy;
+
+        //Private(ish) Functions
+        bool inPosistion();
 };
 
 
