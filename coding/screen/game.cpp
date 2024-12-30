@@ -187,10 +187,12 @@ std::vector<bool> Game::flagCollisions(sf::CircleShape shape){
 void Game::updateDeathCollision(sf::CircleShape& PacMan, sf::CircleShape& Ghost)
 {
     if(PacMan.getGlobalBounds().intersects(Ghost.getGlobalBounds())){
-        for(int i = 0; i < this->ghosts.size(); i++){
-            this->ghosts.at(i)->getShape().setPosition(this->ghosts.at(i)->getDefaultX(), this->ghosts.at(i)->getDefaultY());
-        }
         PacMan.setPosition(24.f, 24.f);
+        for(int i = 0; i < this->ghosts.size(); i++){
+            //Resets shape and path for all ghosts
+            this->ghosts.at(i)->getShape().setPosition(this->ghosts.at(i)->getDefaultX(), this->ghosts.at(i)->getDefaultY());
+            this->ghosts.at(i)->setPath(PacMan, bitmap);
+        }
         this->lives -= 1;
     }
 }
