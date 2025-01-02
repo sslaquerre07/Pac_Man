@@ -3,8 +3,8 @@
 
 #include "ghost.h"
 #include "ghost.cpp"
-#include "./pathSetting/shortestPath.h"
-#include "./pathSetting/shortestPath.cpp"
+#include "./pathSetting/threeTurnsAhead.h"
+#include "./pathSetting/threeTurnsAhead.cpp"
 
 class Blinky: public Ghost{
     public:

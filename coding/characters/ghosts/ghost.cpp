@@ -227,7 +227,7 @@ void Ghost::update()
         //Now update the ghosts position
         this->shape.setPosition(this->shape.getPosition().x + this->movementSpeedX, this->shape.getPosition().y + this->movementSpeedY);
         //Checking edge cases where ghost is on the far left and right sides of the screen
-        if((getCurrCol() <= 0 && next_corner.at(1) != 6) || (getCurrCol() >= 27 && next_corner.at(1) != 21)){teleportGhost();}
+        if((getCurrCol() <= 0 && getCurrRow() == 13 && next_corner.at(1) != 6) || (getCurrCol() >= 27 && getCurrRow() == 13 && next_corner.at(1) != 21)){teleportGhost();}
     }
     
 }

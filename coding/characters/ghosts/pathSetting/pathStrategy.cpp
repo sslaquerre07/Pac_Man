@@ -1,5 +1,16 @@
 #include "pathStrategy.h"
 
+bool PathStrategy::isValid(const std::vector<std::vector<int>>& bitmap, int row, int col) {
+    return row >= 0 && row < static_cast<int>(bitmap.size()) &&
+           col >= 0 && col < static_cast<int>(bitmap[0].size()) &&
+           bitmap[row][col] < 2;
+}
+
+// Function to calculate Manhattan distance
+int PathStrategy::calculateDistance(int row1, int col1, int row2, int col2) {
+    return std::abs(row1 - row2) + std::abs(col1 - col2);
+}
+
 //Decides where the next corner for ghosts to re-evaluate is 
 std::vector<int> PathStrategy::reachCorner(const std::vector<std::vector<int>>& bitmap, int row, int col, int direction){
     int init_row = row;
