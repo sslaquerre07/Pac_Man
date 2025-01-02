@@ -18,6 +18,8 @@ std::vector<std::vector<int>> ThreeTurnsAhead::setPath(const sf::Shape& src, con
         }
         corners.push_back({temp, src_col});
     }
+    //Algorithm implemented here
+    
     return corners;
 }
 

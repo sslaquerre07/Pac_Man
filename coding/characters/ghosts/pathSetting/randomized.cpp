@@ -21,15 +21,9 @@ std::vector<std::vector<int>> Randomized::setPath(const sf::Shape& src, const sf
     else{
         std::vector<std::vector<int>> possible_corners = {};
         for(int i = 0; i < 4; i++){
-            //Must verify that it is another corner and not just the same spot
-            std::vector<int> corner = reachCorner(bitmap, src_row, src_col, i);
-            if(corner.at(0) != src_row || corner.at(1) != src_col){
-                possible_corners.push_back(reachCorner(bitmap, src_row, src_col, i));
-            }
+            possible_corners.push_back(reachCorner(bitmap, src_row, src_col, i));
         }
         //Grab random corner from the list
-        // Seed the random number generator
-        std::srand(std::time(0));
         // Generate a random index and grab that corner
         int random_number = std::rand() % possible_corners.size();
         corners.push_back(possible_corners.at(random_number));
