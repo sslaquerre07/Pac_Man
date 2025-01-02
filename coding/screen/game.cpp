@@ -47,7 +47,7 @@ Game::Game()
     this->ghosts.push_back(new Clyde(*this->window));
     //Initialize the paths as well
     for(int i = 0; i < 4; i++){
-        this->ghosts.at(i)->setPath(PacMan.getShape(), bitmap);
+        this->ghosts.at(i)->setPath(PacMan.getShape(), bitmap, false);
     }
     //Based on bitmap
     this->initMap();
@@ -193,7 +193,7 @@ void Game::updateDeathCollision(sf::CircleShape& PacMan, sf::CircleShape& Ghost)
         for(int i = 0; i < this->ghosts.size(); i++){
             //Resets shape and path for all ghosts
             this->ghosts.at(i)->getShape().setPosition(this->ghosts.at(i)->getDefaultX(), this->ghosts.at(i)->getDefaultY());
-            this->ghosts.at(i)->setPath(PacMan, bitmap);
+            this->ghosts.at(i)->setPath(PacMan, bitmap, false);
         }
         this->lives -= 1;
     }
@@ -223,6 +223,18 @@ void Game::validGhostDirections(Ghost& Ghost)
     }
 }
 
+//Only checks for corners with more than two valid directions
+bool Game::isCorner(const std::vector<std::vector<int>>& bitmap, int row, int col){
+    int valid_directions = 0;
+    //Otherwise check all four directions and increment as needed
+    if(bitmap.at(row).at(col-1) < 2){valid_directions++;}
+    if(bitmap.at(row).at(col+1) < 2){valid_directions++;}
+    if(bitmap.at(row-1).at(col) < 2){valid_directions++;}
+    if(bitmap.at(row+1).at(col) < 2){valid_directions++;}
+
+    return valid_directions > 2;
+}
+
 void Game::update()
 {
     this->pollEvents();
@@ -230,13 +242,22 @@ void Game::update()
 
     //Updating Ghost Data
     for(int i = 0; i<ghosts.size(); i++){
+        ghosts.at(i)->update();
         // //Checking for collisions
         std::vector<bool> flags = flagCollisions(ghosts.at(i)->getShape());
         if(flags.at(0) || flags.at(1) || flags.at(2) || flags.at(3)){
             ghosts.at(i)->updateWallCollisions(bitmap, flags);
-            ghosts.at(i)->setPath(PacMan.getShape(), bitmap); 
+            ghosts.at(i)->setPath(PacMan.getShape(), bitmap, false); 
         }
-        ghosts.at(i)->update();
+        //Move at 3 or 4 way intersection
+        else if((isCorner(bitmap, ghosts.at(i)->getCurrRow(), ghosts.at(i)->getCurrCol()) && ghosts.at(i)->inPosition())){
+            std::vector<std::vector<int>> prev_path = ghosts.at(i)->getPath();
+            ghosts.at(i)->setPath(PacMan.getShape(), bitmap, true); 
+            //If the path was wiped, restore to previous path
+            if(ghosts.at(i)->getPath().size() == 0){
+                ghosts.at(i)->setActualPath(prev_path);
+            }
+        }
         updateDeathCollision(PacMan.getShape(), ghosts.at(i)->getShape());
     }
 

@@ -4,7 +4,7 @@
 
 class ShortestPath: public PathStrategy{
     public:
-        std::vector<std::vector<int>> setPath(const sf::Shape& src, const sf::Shape& dest, const std::vector<std::vector<int>>& bitmap) override;
+        std::vector<std::vector<int>> setPath(const sf::Shape& src, const sf::Shape& dest, const std::vector<std::vector<int>>& bitmap, bool isIntersection) override;
 };
 
 #endif

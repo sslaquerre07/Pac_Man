@@ -3,7 +3,7 @@
 
 #include "threeTurnsAhead.h"
 
-std::vector<std::vector<int>> ThreeTurnsAhead::setPath(const sf::Shape& src, const sf::Shape& dest, const std::vector<std::vector<int>>& bitmap){
+std::vector<std::vector<int>> ThreeTurnsAhead::setPath(const sf::Shape& src, const sf::Shape& dest, const std::vector<std::vector<int>>& bitmap, bool isIntersection){
     //Initialize appropriate vars
     std::vector<std::vector<int>> corners = {};
     int src_row = floor(src.getGlobalBounds().getPosition().y/24);

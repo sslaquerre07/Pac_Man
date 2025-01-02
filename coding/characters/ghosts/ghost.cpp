@@ -18,21 +18,15 @@ Ghost::~Ghost()
 
 //Private functions
 //Sees if the ghost is in position to move to its next corner
-bool Ghost::inPosistion(){
+bool Ghost::inPosition(){
     const std::vector<int>& next_corner = path.at(0);
     const float& curr_x = shape.getGlobalBounds().getPosition().x;
     const float& curr_y = shape.getGlobalBounds().getPosition().y;
     //Now, check all corners and make sure they are in the correct frame to progress
-    if(floor((curr_x)/24) != next_corner.at(0) || floor((curr_y)/24) != next_corner.at(1)){
+    if(floor((curr_x)/24) != floor((curr_x+18)/24)){
         return false;
     }
-    if(floor((curr_x+18)/24) != next_corner.at(0) || floor((curr_y)/24) != next_corner.at(1)){
-        return false;
-    }
-    if(floor((curr_x+18)/24) != next_corner.at(0) || floor((curr_y+18)/24) != next_corner.at(1)){
-        return false;
-    }
-    if(floor((curr_x)/24) != next_corner.at(0) || floor(curr_y+18/24) != next_corner.at(1)){
+    if(floor((curr_y)/24) != floor((curr_y+18)/24)){
         return false;
     }
     //If none of the above conditions are met, the ghost is in its required tile
@@ -67,26 +61,16 @@ const int& Ghost::getDirection(const int& index)
 
 const int Ghost::getCurrRow()
 {
-    if(int(this->shape.getPosition().y) % 24 <= 5)
-    {
-        return int(floor(this->shape.getPosition().y / 24));
-    }
-    else
-    {
-        return 1;
-    }
+    return floor(this->shape.getGlobalBounds().getPosition().y / 24);
 }
 
 const int Ghost::getCurrCol()
 {
-    if(int(this->shape.getPosition().x) % 24 <= 5)
-    {
-        return int(floor(this->shape.getPosition().x / 24));
-    }
-    else
-    {
-        return 10;
-    }
+    return floor(this->shape.getGlobalBounds().getPosition().x / 24);
+}
+
+const std::vector<std::vector<int>> Ghost::getPath(){
+    return path;
 }
 
 //Setters
@@ -125,8 +109,12 @@ void Ghost::setDirection(const int& index)
     }
 }
 
-void Ghost::setPath(sf::CircleShape& pacman, const std::vector<std::vector<int>>& bitmap){
-    path = strategy->setPath(shape, pacman, bitmap);
+void Ghost::setPath(sf::CircleShape& pacman, const std::vector<std::vector<int>>& bitmap, bool isIntersection){
+    path = strategy->setPath(shape, pacman, bitmap, isIntersection);
+}
+
+void Ghost::setActualPath(std::vector<std::vector<int>> path){
+    this->path = path;
 }
 
 void Ghost::updateWallCollisions(const std::vector<std::vector<int>>& bitmap, const std::vector<bool>& flags){
@@ -188,15 +176,31 @@ void Ghost::updateWallCollisions(const std::vector<std::vector<int>>& bitmap, co
     }
 }
 
+//Handles edge case where ghost must be transported to the other side of the game
+void Ghost::teleportGhost(){
+    if(getCurrCol() <= 0){
+        shape.setPosition(624, 312);
+        //Update corner to allow the ghost to keep moving
+        path.at(0).at(1) = 6;
+    }
+    else{
+        shape.setPosition(24, 312);
+        //Update corner to allow the ghost to keep moving
+        path.at(0).at(1) = 21;
+    }
+}
+
 void Ghost::update()
 {
     int curr_col = floor(shape.getGlobalBounds().getPosition().x/24);
     int curr_row = floor(shape.getGlobalBounds().getPosition().y/24);
+
     //Check first to see if there are elements in the path list
-    if(path.empty() || inPosistion()){
+    if(path.empty()){
         //Should never occur, but ghosts should stop if it does
         setDirection(10);
     }
+    //Otherwise, progress based on what's needed
     else{
         std::vector<int> next_corner = path.at(0);
         //If the origin is in the right spot but not quite in position yet
@@ -220,8 +224,12 @@ void Ghost::update()
         else{
             setDirection(10);
         }
+        //Now update the ghosts position
+        this->shape.setPosition(this->shape.getPosition().x + this->movementSpeedX, this->shape.getPosition().y + this->movementSpeedY);
+        //Checking edge cases where ghost is on the far left and right sides of the screen
+        if((getCurrCol() <= 0 && next_corner.at(1) != 6) || (getCurrCol() >= 27 && next_corner.at(1) != 21)){teleportGhost();}
     }
-    this->shape.setPosition(this->shape.getPosition().x + this->movementSpeedX, this->shape.getPosition().y + this->movementSpeedY);
+    
 }
 
 void Ghost::render(sf::RenderTarget& target)

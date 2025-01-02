@@ -3,7 +3,10 @@
 
 #include "randomized.h"
 
-std::vector<std::vector<int>> Randomized::setPath(const sf::Shape& src, const sf::Shape& dest, const std::vector<std::vector<int>>& bitmap){
+std::vector<std::vector<int>> Randomized::setPath(const sf::Shape& src, const sf::Shape& dest, const std::vector<std::vector<int>>& bitmap, bool isIntersection){
+if(isIntersection && (std::rand() % 4 != 1)){
+        return {};
+    }
     //Initialize appropriate vars
     std::vector<std::vector<int>> corners = {};
     int src_row = floor(src.getGlobalBounds().getPosition().y/24);

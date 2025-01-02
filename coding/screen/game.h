@@ -37,6 +37,7 @@ class Game
         void updateText();
         void updateDeathCollision(sf::CircleShape& PacMan, sf::CircleShape& Ghost);
         void validGhostDirections(Ghost& Ghost);
+        bool isCorner(const std::vector<std::vector<int>>& bitmap, int row, int col);
         void update();
 
         void renderText(sf::RenderTarget& target);

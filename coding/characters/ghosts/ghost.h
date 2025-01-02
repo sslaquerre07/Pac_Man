@@ -21,6 +21,7 @@ class Ghost
         const int& getDirection(const int& index);
         const int getCurrRow();
         const int getCurrCol();
+        const std::vector<std::vector<int>> getPath();
 
         //Setters
         void setGoodDirection(const int& index);
@@ -30,7 +31,10 @@ class Ghost
         void updateWallCollisions(const std::vector<std::vector<int>>& bitmap, const std::vector<bool>& flags);
         void update();
         void render(sf::RenderTarget& target);
-        void setPath(sf::CircleShape& pacman, const std::vector<std::vector<int>>& bitmap);
+        void setPath(sf::CircleShape& pacman, const std::vector<std::vector<int>>& bitmap, bool isIntersection);
+        void setActualPath(std::vector<std::vector<int>> path);
+        bool inPosition();
+        void teleportGhost();
 
     protected:
         //Data members
@@ -46,7 +50,6 @@ class Ghost
         PathStrategy* strategy;
 
         //Private(ish) Functions
-        bool inPosistion();
 };
 
 
